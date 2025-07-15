@@ -2,6 +2,8 @@
 
 A modern, responsive web application for exploring, searching, and managing emojis with ease. Built with vanilla JavaScript and styled with Tailwind CSS.
 
+**Repository**: [https://github.com/devrimfidan/emojis](https://github.com/devrimfidan/emojis)
+
 ## ✨ Features
 
 ### 🔍 **Main Explorer Page**
@@ -31,7 +33,7 @@ A modern, responsive web application for exploring, searching, and managing emoj
 
 ## 🚀 Live Demo
 
-Visit the live application: [Your GitHub Pages URL]
+Visit the live application: [https://devrimfidan.github.io/emojis](https://devrimfidan.github.io/emojis)
 
 ## 📁 Project Structure
 
@@ -75,8 +77,8 @@ emoji-explorer/
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/emoji-explorer.git
-   cd emoji-explorer
+   git clone https://github.com/devrimfidan/emojis.git
+   cd emojis
    ```
 
 2. **Start a local server**
