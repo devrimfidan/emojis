@@ -63,12 +63,18 @@
                         🎭 Emoji Explorer
                     </h1>
                 </div>
-                <div class="flex items-center space-x-4">
-                    <a href="manage-popular.html" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200">
-                        Manage Popular Emojis
+                <div class="flex items-center space-x-2 md:space-x-4">
+                    <a href="manage-popular.html" class="bg-blue-500 hover:bg-blue-600 text-white px-2 py-2 md:px-4 md:py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center">
+                        <!-- Mobile: Show only emoji -->
+                        <span class="md:hidden text-lg">⭐</span>
+                        <!-- Desktop: Show full text -->
+                        <span class="hidden md:inline">Manage Popular Emojis</span>
                     </a>
-                    <div class="text-sm text-gray-500">
-                        Click any emoji to copy!
+                    <div class="text-xs md:text-sm text-gray-500">
+                        <!-- Mobile: Show only emoji and short text -->
+                        <span class="md:hidden">📋 Tap to copy!</span>
+                        <!-- Desktop: Show full text -->
+                        <span class="hidden md:inline">Click any emoji to copy!</span>
                     </div>
                 </div>
             </div>
