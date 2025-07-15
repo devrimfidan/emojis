@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emoji Explorer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .emoji-card {
+            transition: all 0.3s ease;
+        }
+        .emoji-card:hover {
+            transform: scale(1.05);
+        }
+        .copied {
+            animation: pulse 0.5s ease-in-out;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #10b981;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+        .toast.show {
+            transform: translateX(0);
+        }
+        .popular-emoji {
+            transition: all 0.2s ease;
+        }
+        .popular-emoji:hover {
+            transform: scale(1.1);
+            background-color: #eff6ff !important;
+            border-color: #3b82f6 !important;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Toast notification -->
+    <div id="toast" class="toast">
+        <i class="fas fa-check-circle mr-2"></i>
+        Emoji copied to clipboard!
+    </div>
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <h1 class="text-2xl font-bold text-gray-900">
+                        🎭 Emoji Explorer
+                    </h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="manage-popular.html" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200">
+                        Manage Popular Emojis
+                    </a>
+                    <div class="text-sm text-gray-500">
+                        Click any emoji to copy!
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Search and Filter Section -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+            <div class="flex flex-col md:flex-row gap-4">
+                <!-- Search Input -->
+                <div class="flex-1">
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-search text-gray-400"></i>
+                        </div>
+                        <input 
+                            type="text" 
+                            id="searchInput" 
+                            placeholder="Search emojis by name or description..."
+                            class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                        >
+                    </div>
+                </div>
+                
+                <!-- Category Filter -->
+                <div class="md:w-64">
+                    <select 
+                        id="categoryFilter" 
+                        class="block w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-white"
+                    >
+                        <option value="">All Categories</option>
+                        <option value="smileys-emotion">Smileys & Emotion</option>
+                        <option value="people-body">People & Body</option>
+                        <option value="animals-nature">Animals & Nature</option>
+                        <option value="food-drink">Food & Drink</option>
+                        <option value="travel-places">Travel & Places</option>
+                        <option value="activities">Activities</option>
+                        <option value="objects">Objects</option>
+                        <option value="symbols">Symbols</option>
+                        <option value="flags">Flags</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Results Count -->
+            <div class="mt-4 text-sm text-gray-600">
+                Showing <span id="resultsCount">0</span> emojis
+            </div>
+        </div>
+
+        <!-- Emoji Grid -->
+        <div id="emojiGrid" class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 gap-4">
+            <!-- Emojis will be populated here -->
+        </div>
+
+        <!-- Loading State -->
+        <div id="loading" class="text-center py-12">
+            <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+            <p class="mt-2 text-gray-600">Loading emojis...</p>
+        </div>
+
+        <!-- No Results -->
+        <div id="noResults" class="text-center py-12 hidden">
+            <div class="text-6xl mb-4">😕</div>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">No emojis found</h3>
+            <p class="text-gray-600">Try adjusting your search or filter criteria</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="text-center text-gray-600">
+                <p class="mb-2">Made with ❤️ for emoji lovers</p>
+                <p class="text-sm">Unicode Standard v16.0</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Popular Emojis - Emoji Explorer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .emoji-card {
+            transition: all 0.3s ease;
+        }
+        .emoji-card:hover {
+            transform: scale(1.05);
+        }
+        .selected {
+            background-color: #dbeafe !important;
+            border-color: #3b82f6 !important;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+        .popular-emoji {
+            position: relative;
+        }
+        .remove-btn {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+        .popular-emoji:hover .remove-btn {
+            opacity: 1;
+        }
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #10b981;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+        .toast.show {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Toast notification -->
+    <div id="toast" class="toast">
+        <i class="fas fa-check-circle mr-2"></i>
+        <span id="toastMessage">Changes saved!</span>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-4">
+                    <a href="index.html" class="text-blue-500 hover:text-blue-600 flex items-center">
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        Back to Emoji Explorer
+                    </a>
+                    <h1 class="text-2xl font-bold text-gray-900">
+                        🌟 Manage Popular Emojis
+                    </h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="saveBtn" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200">
+                        <i class="fas fa-save mr-2"></i>
+                        Save Changes
+                    </button>
+                    <button id="clearBtn" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200">
+                        <i class="fas fa-trash mr-2"></i>
+                        Clear All
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Current Popular Emojis -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-semibold text-gray-900">
+                    Current Popular Emojis (<span id="popularCount">0</span>)
+                </h2>
+                <span class="text-sm text-gray-500">Click to remove</span>
+            </div>
+            <div id="currentPopular" class="grid grid-cols-8 sm:grid-cols-12 md:grid-cols-16 lg:grid-cols-20 gap-2 min-h-[60px] p-4 border-2 border-dashed border-gray-200 rounded-lg">
+                <div class="col-span-full flex items-center justify-center text-gray-500 text-sm">
+                    No popular emojis selected yet
+                </div>
+            </div>
+        </div>
+
+        <!-- Search and Filter Section -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">Add Emojis to Popular</h2>
+            <div class="flex flex-col md:flex-row gap-4">
+                <!-- Search Input -->
+                <div class="flex-1">
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-search text-gray-400"></i>
+                        </div>
+                        <input 
+                            type="text" 
+                            id="searchInput" 
+                            placeholder="Search emojis to add to popular..."
+                            class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                        >
+                    </div>
+                </div>
+                
+                <!-- Category Filter -->
+                <div class="md:w-64">
+                    <select 
+                        id="categoryFilter" 
+                        title="Filter by category"
+                        class="block w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-white"
+                    >
+                        <option value="">All Categories</option>
+                        <option value="smileys-emotion">Smileys & Emotion</option>
+                        <option value="people-body">People & Body</option>
+                        <option value="animals-nature">Animals & Nature</option>
+                        <option value="food-drink">Food & Drink</option>
+                        <option value="travel-places">Travel & Places</option>
+                        <option value="activities">Activities</option>
+                        <option value="objects">Objects</option>
+                        <option value="symbols">Symbols</option>
+                        <option value="flags">Flags</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Results Count -->
+            <div class="mt-4 text-sm text-gray-600">
+                Showing <span id="resultsCount">0</span> emojis - Click to add to popular
+            </div>
+        </div>
+
+        <!-- Emoji Grid -->
+        <div id="emojiGrid" class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 gap-4">
+            <!-- Emojis will be populated here -->
+        </div>
+
+        <!-- Loading State -->
+        <div id="loading" class="text-center py-12">
+            <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+            <p class="mt-2 text-gray-600">Loading emojis...</p>
+        </div>
+
+        <!-- No Results -->
+        <div id="noResults" class="text-center py-12 hidden">
+            <div class="text-6xl mb-4">😕</div>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">No emojis found</h3>
+            <p class="text-gray-600">Try adjusting your search or filter criteria</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="text-center text-gray-600">
+                <p class="mb-2">Customize your popular emojis for quick access</p>
+                <p class="text-sm">Changes are saved automatically to your browser</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="manage-popular.js"></script>
+</body>
+</html>
